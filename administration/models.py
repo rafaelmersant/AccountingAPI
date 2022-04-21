@@ -3,6 +3,7 @@ from django.db import models
 
 class User(models.Model):
     email = models.EmailField()
+    username = models.CharField(max_length=30)
     password = models.CharField(max_length=150)
     name = models.CharField(max_length=255)
     user_hash = models.CharField(max_length=255, blank=True)
@@ -40,7 +41,6 @@ class Church(models.Model):
 
 class Concept(models.Model):
     description = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
     type = models.CharField(max_length=1, default='E') # Entrada/Salida
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
