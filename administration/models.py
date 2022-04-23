@@ -42,6 +42,7 @@ class Church(models.Model):
 class Concept(models.Model):
     description = models.CharField(max_length=255)
     type = models.CharField(max_length=1, default='E') # Entrada/Salida
+    ocurrences = models.PositiveIntegerField(default=0)
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     

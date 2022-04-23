@@ -14,11 +14,29 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ShepherdSerializer(serializers.ModelSerializer):
-    church_id = serializers.IntegerField()
+    # church_id = serializers.IntegerField()
 
     class Meta:
         model = Person
-        fields = ('id', 'first_name', 'last_name', 'identification', 'church_id'
+        fields = ('id', 'first_name', 'last_name', 'identification', 
+                  'created_date', 'created_by')
+
+
+class ChurchReducedSerializer(serializers.ModelSerializer):
+    shepherd_id = serializers.IntegerField()
+        
+    class Meta:
+        model = Church
+        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd_id',
+                  'created_date', 'created_by')
+
+
+class ChurchAddUpdateSerializer(serializers.ModelSerializer):
+    shepherd_id = serializers.IntegerField()
+        
+    class Meta:
+        model = Church
+        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd_id',
                   'created_date', 'created_by')
 
 
@@ -28,6 +46,15 @@ class ChurchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Church
         fields = ('id', 'global_title', 'local_title', 'location', 'shepherd',
+                  'created_date', 'created_by')
+
+
+class PersonAddUpdateSerializer(serializers.ModelSerializer):
+    church_id = serializers.IntegerField()
+
+    class Meta:
+        model = Person
+        fields = ('id', 'first_name', 'last_name', 'identification', 'church_id',
                   'created_date', 'created_by')
 
 

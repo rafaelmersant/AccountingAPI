@@ -78,8 +78,8 @@ class PersonViewSet(ModelViewSet):
     search_fields = ['first_name', 'last_name', 'identification']
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
-            return serializers.PersonSerializer
+        if self.request.method == 'POST' or self.request.method == 'PUT':
+            return serializers.PersonAddUpdateSerializer
         return serializers.PersonSerializer
 
 
@@ -92,6 +92,6 @@ class ChurchViewSet(ModelViewSet):
     search_fields = ['global_title',]
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
-            return serializers.ChurchSerializer
+        if self.request.method == 'POST' or self.request.method == 'PUT':
+            return serializers.ChurchAddUpdateSerializer
         return serializers.ChurchSerializer
