@@ -11,7 +11,7 @@ router = DefaultRouter()
 router.register('concepts', views.ConceptViewSet)
 router.register('users', views.UserViewSet)
 router.register('people', views.PersonViewSet)
-router.register('churchs', views.ChurchViewSet)
+router.register('churches', views.ChurchViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

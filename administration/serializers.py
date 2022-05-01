@@ -32,7 +32,7 @@ class ChurchReducedSerializer(serializers.ModelSerializer):
 
 
 class ChurchAddUpdateSerializer(serializers.ModelSerializer):
-    shepherd_id = serializers.IntegerField()
+    shepherd_id = serializers.IntegerField(required=False)
         
     class Meta:
         model = Church
@@ -50,7 +50,8 @@ class ChurchSerializer(serializers.ModelSerializer):
 
 
 class PersonAddUpdateSerializer(serializers.ModelSerializer):
-    church_id = serializers.IntegerField()
+    church_id = serializers.IntegerField(required=False)
+    identification = serializers.CharField(max_length=20, required=False)
 
     class Meta:
         model = Person
@@ -68,8 +69,20 @@ class PersonSerializer(serializers.ModelSerializer):
                   'created_date', 'created_by')
 
 
+class PersonSerializer(serializers.ModelSerializer):
+    church = ChurchSerializer(many=False, read_only=True)
+    church_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Person
+        fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
+                  'created_date', 'created_by')
+                  
+
 class ConceptSerializer(serializers.ModelSerializer):
       
     class Meta:
         model = Concept
         fields = ('id', 'description', 'type', 'created_date', 'created_by')
+
+

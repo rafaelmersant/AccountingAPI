@@ -10,6 +10,9 @@ from rest_framework.viewsets import ModelViewSet
 # Serializers
 from . import serializers
 
+# Paginations
+from accounting import paginations
+
 # Others
 import json
 
@@ -72,7 +75,7 @@ class UserLogin(generics.ListCreateAPIView):
 class PersonViewSet(ModelViewSet):
     queryset = Person.objects.select_related('church').all()
     serializer_class = serializers.PersonSerializer
-    # pagination_class = StandardResultsSetPaginationAdmin
+    pagination_class = paginations.StandardResultsSetPaginationAdmin
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id', 'first_name', 'last_name', 'church_id', 'identification']
     search_fields = ['first_name', 'last_name', 'identification']
@@ -86,7 +89,7 @@ class PersonViewSet(ModelViewSet):
 class ChurchViewSet(ModelViewSet):
     queryset = Church.objects.all()
     serializer_class = serializers.ChurchSerializer
-    # pagination_class = StandardResultsSetPaginationAdmin
+    pagination_class = paginations.StandardResultsSetPaginationHigh
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id', 'global_title', 'local_title', 'shepherd']
     search_fields = ['global_title',]

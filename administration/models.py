@@ -31,7 +31,7 @@ class Church(models.Model):
     global_title = models.CharField(max_length=255)
     local_title = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
-    shepherd = models.ForeignKey(Person, on_delete=models.SET_NULL, null=True, related_name="pastor")
+    shepherd = models.ForeignKey(Person, on_delete=models.SET_NULL, blank=True, null=True, related_name="pastor")
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     

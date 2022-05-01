@@ -16,9 +16,9 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entry
         fields = ('id', 'person', 'note', 'period_year', 'period_month', 'church',
-                  'created_date', 'created_by')
-
-
+                  'created_date', 'created_by', 'total_amount')
+        
+    
 class EntryAddUpdateSerializer(serializers.ModelSerializer):
     church_id = serializers.IntegerField(required=False)
     person_id = serializers.IntegerField(required=False)
@@ -30,13 +30,25 @@ class EntryAddUpdateSerializer(serializers.ModelSerializer):
         # optional_fields = ('church_id', 'person_id')
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class EntryItemSerializer(serializers.ModelSerializer):
     entry = EntrySerializer(many=False)
     concept = ConceptSerializer(many=False)
 
     class Meta:
         model = Item
         fields = ('id', 'entry', 'concept', 'amount', 'reference', 'type')
+
+
+class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
+    concept_id = serializers.IntegerField()
+
+    class Meta:
+        model = Item
+        fields = ('id', 'entry_id', 'concept_id', 'amount', 'reference', 'type')
+
+    def create(self, validated_data):
+        entry_id = self.context['entry_id']
+        return Item.objects.create(entry_id=entry_id, **validated_data)
 
     def save(self, **kwargs):
         try:
@@ -45,6 +57,24 @@ class ItemSerializer(serializers.ModelSerializer):
             concept.ocurrences += 1 
             concept.save()
         except Concept.DoesNotExist:
+            pass
+
+        try:
+            amount = self.validated_data['amount']
+
+            entry_id = self.context['entry_id']
+            entry = Entry.objects.get(id=entry_id)
+            try:
+                if self.context['item_id'] is not None:
+                    item_id = self.context['item_id'] 
+                    item = Item.objects.get(id=item_id)
+                    entry.total_amount -= item.amount
+                    entry.total_amount += amount
+            except Item.DoesNotExist:
+                entry.total_amount += amount
+
+            entry.save()
+        except Entry.DoesNotExist:
             pass
         
         return super().save(**kwargs)
