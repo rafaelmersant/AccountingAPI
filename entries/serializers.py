@@ -60,23 +60,23 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
         except Concept.DoesNotExist:
             pass
 
-        try:
-            amount = self.validated_data['amount']
+        # try:
+        #     amount = self.validated_data['amount']
 
-            entry_id = self.context['entry_id']
-            entry = Entry.objects.get(id=entry_id)
-            try:
-                if self.context['item_id'] is not None:
-                    item_id = self.context['item_id'] 
-                    item = Item.objects.get(id=item_id)
-                    entry.total_amount -= item.amount
-                    entry.total_amount += amount
-            except Item.DoesNotExist:
-                pass
-                # entry.total_amount += amount
+        #     entry_id = self.context['entry_id']
+        #     entry = Entry.objects.get(id=entry_id)
+        #     try:
+        #         if self.context['item_id'] is not None:
+        #             item_id = self.context['item_id'] 
+        #             item = Item.objects.get(id=item_id)
+        #             entry.total_amount -= item.amount
+        #             entry.total_amount += amount
+        #     except Item.DoesNotExist:
+        #         pass
+        #         # entry.total_amount += amount
 
-            entry.save()
-        except Entry.DoesNotExist:
-            pass
+        #     entry.save()
+        # except Entry.DoesNotExist:
+        #     pass
         
         return super().save(**kwargs)
