@@ -33,6 +33,8 @@ class ChurchReducedSerializer(serializers.ModelSerializer):
 
 class ChurchAddUpdateSerializer(serializers.ModelSerializer):
     shepherd_id = serializers.IntegerField(required=False)
+    local_title = serializers.CharField(max_length=255, required=False)
+    location = serializers.CharField(max_length=255, required=False)
         
     class Meta:
         model = Church
@@ -77,7 +79,7 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'created_date', 'created_by')
-                  
+
 
 class ConceptSerializer(serializers.ModelSerializer):
       

@@ -23,8 +23,10 @@ from .models import User, Concept, Church, Person
 class ConceptViewSet(ModelViewSet):
     queryset = Concept.objects.all()
     serializer_class = serializers.ConceptSerializer
-    filter_backends = [DjangoFilterBackend]
+    pagination_class = paginations.StandardResultsSetPaginationAdmin
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id', 'description', 'type']
+    search_fields = ['description',]
 
 
 class UserViewSet(ModelViewSet):

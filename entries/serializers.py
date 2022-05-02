@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from administration.serializers import ChurchReducedSerializer,  \
-    ConceptSerializer, PersonSerializer
+    ConceptSerializer, PersonSerializer, UserSerializer
 
 # Models
 from .models import Entry, Item
@@ -12,6 +12,7 @@ from administration.models import Concept
 class EntrySerializer(serializers.ModelSerializer):
     church = ChurchReducedSerializer(many=False, read_only=True)
     person = PersonSerializer(many=False, read_only=True)
+    created_by = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Entry
@@ -26,7 +27,7 @@ class EntryAddUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Entry
         fields = ('id', 'church_id', 'person_id', 'note', 'period_year', 'period_month',
-                  'created_date', 'created_by')
+                  'total_amount', 'created_date', 'created_by')
         # optional_fields = ('church_id', 'person_id')
 
 
@@ -71,7 +72,8 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
                     entry.total_amount -= item.amount
                     entry.total_amount += amount
             except Item.DoesNotExist:
-                entry.total_amount += amount
+                pass
+                # entry.total_amount += amount
 
             entry.save()
         except Entry.DoesNotExist:

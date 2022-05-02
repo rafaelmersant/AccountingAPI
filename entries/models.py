@@ -5,7 +5,7 @@ from administration.models import Concept, Church, Person, User
 class Entry(models.Model):
     church = models.ForeignKey(Church, on_delete=models.SET_NULL, null=True, blank=True)
     person = models.ForeignKey(Person, on_delete=models.SET_NULL, null=True, blank=True)
-    note = models.CharField(max_length=255)
+    note = models.CharField(max_length=255, blank=True)
     period_year = models.PositiveSmallIntegerField()
     period_month = models.PositiveSmallIntegerField()
     total_amount = models.DecimalField(max_digits=18, decimal_places=2, blank=True)
@@ -22,6 +22,7 @@ class Item(models.Model):
     amount = models.DecimalField(max_digits=18, decimal_places=2, null=True)
     reference = models.CharField(max_length=255, blank=True, null=True)
     type = models.CharField(max_length=1, default="E")
+    created_date = models.DateTimeField(auto_now_add=True, blank=True)
     
     def __str__(self):
         return f'{self.id}'
