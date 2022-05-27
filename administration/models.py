@@ -18,7 +18,7 @@ class User(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    identification = models.CharField(max_length=20)
+    identification = models.CharField(max_length=20, null=True, blank=True)
     church = models.ForeignKey("Church", on_delete=models.SET_NULL, null=True)
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
@@ -29,8 +29,8 @@ class Person(models.Model):
 
 class Church(models.Model):
     global_title = models.CharField(max_length=255)
-    local_title = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
+    local_title = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
     shepherd = models.ForeignKey(Person, on_delete=models.SET_NULL, blank=True, null=True, related_name="pastor")
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)

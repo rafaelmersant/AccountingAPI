@@ -9,15 +9,24 @@ from .models import Entry, Item
 from administration.models import Concept
 
 
+class EntryItemReducedSerializer(serializers.ModelSerializer):
+    concept = ConceptSerializer(many=False)
+
+    class Meta:
+        model = Item
+        fields = ('id', 'concept', 'amount', 'reference', 'type')
+
+
 class EntrySerializer(serializers.ModelSerializer):
     church = ChurchReducedSerializer(many=False, read_only=True)
     person = PersonSerializer(many=False, read_only=True)
     created_by = UserSerializer(many=False, read_only=True)
+    item_set = EntryItemReducedSerializer(many=True)
 
     class Meta:
         model = Entry
         fields = ('id', 'person', 'note', 'period_year', 'period_month', 'church',
-                  'created_date', 'created_by', 'total_amount')
+                  'created_date', 'created_by', 'total_amount', 'item_set')
         
     
 class EntryAddUpdateSerializer(serializers.ModelSerializer):

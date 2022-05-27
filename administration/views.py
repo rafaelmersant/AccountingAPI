@@ -91,7 +91,7 @@ class PersonViewSet(ModelViewSet):
 class ChurchViewSet(ModelViewSet):
     queryset = Church.objects.all()
     serializer_class = serializers.ChurchSerializer
-    pagination_class = paginations.StandardResultsSetPaginationHigh
+    pagination_class = paginations.StandardResultsSetPaginationLevelHighest
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id', 'global_title', 'local_title', 'shepherd']
     search_fields = ['global_title',]

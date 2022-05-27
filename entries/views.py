@@ -18,7 +18,7 @@ from .models import Entry, Item
 
 
 class EntryViewSet(ModelViewSet):
-    queryset = Entry.objects.prefetch_related("church").prefetch_related("person").prefetch_related('created_by').all()
+    queryset = Entry.objects.prefetch_related("item_set").prefetch_related("church").prefetch_related("person").prefetch_related('created_by').all()
     serializer_class = serializers.EntrySerializer
     pagination_class = paginations.EntryListPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -28,6 +28,15 @@ class EntryViewSet(ModelViewSet):
         if self.request.method == 'POST' or self.request.method == 'PUT':
             return serializers.EntryAddUpdateSerializer
         return serializers.EntrySerializer
+    
+    def get_queryset(self):
+        start_date = self.request.query_params.get('start_date', None)
+        end_date = self.request.query_params.get('end_date', None)
+
+        if start_date is not None and end_date is not None:
+            self.queryset = self.queryset.filter(created_date__date__gte=start_date, created_date__date__lte=end_date)
+        
+        return self.queryset
 
 
 class EntryItemViewSet(ModelViewSet):

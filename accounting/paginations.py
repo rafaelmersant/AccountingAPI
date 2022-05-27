@@ -3,13 +3,14 @@ from rest_framework.pagination import PageNumberPagination
 
 class EntryListPagination(PageNumberPagination):
     def get_page_size(self, request):
+        start_date = request.query_params.get('start_date', None)
         church = request.query_params.get('church', None)
         person = request.query_params.get('person', None)
 
-        if church is not None or person is not None:
-            return 90000
+        if church is not None or person is not None or start_date is not None:
+            return 9000000
         else:
-            return 10
+            return 20
 
 
 class StandardResultsSetPagination(PageNumberPagination):

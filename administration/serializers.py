@@ -23,11 +23,11 @@ class ShepherdSerializer(serializers.ModelSerializer):
 
 
 class ChurchReducedSerializer(serializers.ModelSerializer):
-    shepherd_id = serializers.IntegerField()
+    shepherd = ShepherdSerializer()
         
     class Meta:
         model = Church
-        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd_id',
+        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd',
                   'created_date', 'created_by')
 
 
