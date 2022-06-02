@@ -18,8 +18,7 @@ class ShepherdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ('id', 'first_name', 'last_name', 'identification', 
-                  'created_date', 'created_by')
+        fields = ('id', 'first_name', 'last_name', 'identification')
 
 
 class ChurchReducedSerializer(serializers.ModelSerializer):
@@ -58,16 +57,6 @@ class PersonAddUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church_id',
-                  'created_date', 'created_by')
-
-
-class PersonSerializer(serializers.ModelSerializer):
-    church = ChurchSerializer(many=False, read_only=True)
-    church_id = serializers.IntegerField(write_only=True)
-
-    class Meta:
-        model = Person
-        fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'created_date', 'created_by')
 
 

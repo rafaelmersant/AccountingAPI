@@ -75,7 +75,7 @@ class UserLogin(generics.ListCreateAPIView):
 
 
 class PersonViewSet(ModelViewSet):
-    queryset = Person.objects.select_related('church').all()
+    queryset = Person.objects.select_related('church').prefetch_related("church__shepherd").all()
     serializer_class = serializers.PersonSerializer
     pagination_class = paginations.StandardResultsSetPaginationAdmin
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -89,7 +89,7 @@ class PersonViewSet(ModelViewSet):
 
 
 class ChurchViewSet(ModelViewSet):
-    queryset = Church.objects.all()
+    queryset = Church.objects.select_related("shepherd").select_related("created_by").all()
     serializer_class = serializers.ChurchSerializer
     pagination_class = paginations.StandardResultsSetPaginationLevelHighest
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]

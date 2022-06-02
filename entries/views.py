@@ -18,7 +18,15 @@ from .models import Entry, Item
 
 
 class EntryViewSet(ModelViewSet):
-    queryset = Entry.objects.prefetch_related("item_set").prefetch_related("church").prefetch_related("person").prefetch_related('created_by').all()
+    queryset = Entry.objects.prefetch_related("item_set__concept") \
+                            .prefetch_related("item_set") \
+                            .prefetch_related("church") \
+                            .prefetch_related("person") \
+                            .prefetch_related("church__shepherd") \
+                            .prefetch_related("person__church") \
+                            .prefetch_related("person__church__shepherd") \
+                            .prefetch_related('created_by').all()
+
     serializer_class = serializers.EntrySerializer
     pagination_class = paginations.EntryListPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -45,8 +53,18 @@ class EntryItemViewSet(ModelViewSet):
     filterset_fields = ['id', 'reference', 'concept', 'type']
 
     def get_queryset(self):
-        return Item.objects.prefetch_related("entry").filter(entry_id=self.kwargs["entry_pk"])
-
+        return Item.objects \
+            .prefetch_related("entry") \
+            .select_related("concept") \
+            .prefetch_related('entry__church') \
+            .prefetch_related('entry__person') \
+            .prefetch_related('entry__created_by') \
+            .prefetch_related('entry__person__church') \
+            .prefetch_related('entry__person__church__shepherd') \
+            .prefetch_related('entry__item_set') \
+            .prefetch_related('entry__item_set__concept') \
+            .filter(entry_id=self.kwargs["entry_pk"])
+       
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.request.method == 'PUT':
             return serializers.EntryItemAddUpdateSerializer

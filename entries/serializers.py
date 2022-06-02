@@ -14,7 +14,8 @@ class EntryItemReducedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id', 'concept', 'amount', 'reference', 'type')
+        fields = ('id', 'concept', 'amount', 'reference', 'type',  \
+                  'period_year', 'period_month')
 
 
 class EntrySerializer(serializers.ModelSerializer):
@@ -46,7 +47,8 @@ class EntryItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id', 'entry', 'concept', 'amount', 'reference', 'type')
+        fields = ('id', 'entry', 'concept', 'amount', 'reference', 'type', \
+                  'period_year', 'period_month')
 
 
 class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
@@ -54,7 +56,8 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id', 'entry_id', 'concept_id', 'amount', 'reference', 'type')
+        fields = ('id', 'entry_id', 'concept_id', 'amount', 'reference', 'type', \
+                  'period_year', 'period_month')
 
     def create(self, validated_data):
         entry_id = self.context['entry_id']
