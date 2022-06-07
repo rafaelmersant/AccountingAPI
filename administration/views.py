@@ -23,7 +23,7 @@ from .models import User, Concept, Church, Person
 class ConceptViewSet(ModelViewSet):
     queryset = Concept.objects.all()
     serializer_class = serializers.ConceptSerializer
-    pagination_class = paginations.StandardResultsSetPaginationAdmin
+    pagination_class = paginations.StandardResultsSetPaginationLevelHighest
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['id', 'description', 'type']
     search_fields = ['description',]
