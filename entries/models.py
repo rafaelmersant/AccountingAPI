@@ -23,7 +23,8 @@ class Item(models.Model):
     reference = models.CharField(max_length=255, blank=True, null=True)
     period_year = models.PositiveSmallIntegerField()
     period_month = models.PositiveSmallIntegerField()
-    type = models.CharField(max_length=1, default="E")
+    type = models.CharField(max_length=1, default="E") #E = Entrada / S = Salida
+    method = models.CharField(max_length=1, default="E") #E = Efectivo / D = Deposito / R = Retenido
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     
     def __str__(self):
