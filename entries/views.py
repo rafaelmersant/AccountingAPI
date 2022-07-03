@@ -40,7 +40,13 @@ class EntryViewSet(ModelViewSet):
     def get_queryset(self):
         start_date = self.request.query_params.get('start_date', None)
         end_date = self.request.query_params.get('end_date', None)
+        dashboard = self.request.query_params.get('dashboard', None)
+        period_month = self.request.query_params.get('period_month', None)
+        period_year = self.request.query_params.get('period_year', None)
 
+        if dashboard is not None and period_month != '0':
+            self.queryset = self.queryset.filter(period_month=period_month, period_year=period_year)
+        
         if start_date is not None and end_date is not None:
             self.queryset = self.queryset.filter(created_date__date__gte=start_date, created_date__date__lte=end_date)
         

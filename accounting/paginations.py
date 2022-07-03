@@ -6,8 +6,10 @@ class EntryListPagination(PageNumberPagination):
         start_date = request.query_params.get('start_date', None)
         church = request.query_params.get('church', None)
         person = request.query_params.get('person', None)
+        dashboard = request.query_params.get('dashboard', None)
 
-        if church is not None or person is not None or start_date is not None:
+        if church is not None or person is not None or \
+            start_date is not None or dashboard is not None:
             return 9000000
         else:
             return 20
