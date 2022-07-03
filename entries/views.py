@@ -16,6 +16,9 @@ import json
 # Models
 from .models import Entry, Item
 
+import datetime
+from datetime import datetime as date_format
+
 
 class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.prefetch_related("item_set__concept") \
@@ -48,8 +51,12 @@ class EntryViewSet(ModelViewSet):
             self.queryset = self.queryset.filter(period_month=period_month, period_year=period_year)
         
         if start_date is not None and end_date is not None:
-            self.queryset = self.queryset.filter(created_date__date__gte=start_date, created_date__date__lte=end_date)
-        
+            _start_date = date_format.strptime(start_date, '%Y-%m-%d')
+            _end_date = date_format.strptime(end_date, '%Y-%m-%d')
+            
+            self.queryset = self.queryset.filter(created_date__gte=datetime.datetime.combine(_start_date, datetime.time.min), \
+                                                created_date__lte=datetime.datetime.combine(_end_date, datetime.time.max))
+
         return self.queryset
 
 
