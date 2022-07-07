@@ -91,3 +91,30 @@ class EntryItemViewSet(ModelViewSet):
         
         return {'entry_id': self.kwargs['entry_pk'], 'item_id': item_id}
         
+
+class ChurchReportViewSet(ModelViewSet):
+    http_method_names = ['get']
+    serializer_class = serializers.ChurchReportSerializer
+
+    def get_queryset(self):
+       period_month = self.request.query_params.get('period_month', None)
+       period_year = self.request.query_params.get('period_year', None)
+
+       if period_month is not None and period_year is not None:
+           query = """
+                    select 
+                        c.id, c.global_title, h.period_month, h.period_year, 
+                        (select d.amount from entries_item d 
+                        where d.entry_id = h.id and d.concept_id = 1 and d.period_month = #periodMonth# 
+                        and d.period_year = #periodYear#) percent_concilio,
+                        (select d.amount from entries_item d 
+                        where d.entry_id = h.id and d.concept_id = 2 and d.period_month = #periodMonth# 
+                        and d.period_year = #periodYear#) ofrenda_misionera
+                    from administration_church c
+                    left outer join entries_entry h on h.church_id = c.id and 
+                    h.id in (select d2.entry_id from entries_item d2 where d2.concept_id in (1,2)
+                             and d2.period_month = #periodMonth# and d2.period_year = #periodYear#)
+                    order by 2
+                    """.replace("#periodMonth#", period_month).replace("#periodYear#", period_year)
+
+           return Item.objects.raw(query)

@@ -9,6 +9,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('entries', views.EntryViewSet)
+router.register('churchesreport', views.ChurchReportViewSet, basename="churchesreport")
 
 entries_router = routers.NestedDefaultRouter(router, 'entries', lookup='entry')
 entries_router.register('items', views.EntryItemViewSet, basename='entry-items')

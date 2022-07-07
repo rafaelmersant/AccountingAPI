@@ -92,3 +92,13 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
         #     pass
         
         return super().save(**kwargs)
+
+
+class ChurchReportSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    global_title = serializers.CharField(max_length=255)
+    percent_concilio = serializers.DecimalField(max_digits=18, decimal_places=6, default=0)
+    ofrenda_misionera = serializers.DecimalField(max_digits=18, decimal_places=6, default=0)
+    period_month = serializers.IntegerField()
+    period_year = serializers.IntegerField()
+    
