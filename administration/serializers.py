@@ -26,7 +26,7 @@ class ChurchReducedSerializer(serializers.ModelSerializer):
         
     class Meta:
         model = Church
-        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd',
+        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd', 'zone',
                   'created_date', 'created_by')
 
 
@@ -37,7 +37,7 @@ class ChurchAddUpdateSerializer(serializers.ModelSerializer):
         
     class Meta:
         model = Church
-        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd_id',
+        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd_id', 'zone',
                   'created_date', 'created_by')
 
 
@@ -46,7 +46,7 @@ class ChurchSerializer(serializers.ModelSerializer):
         
     class Meta:
         model = Church
-        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd',
+        fields = ('id', 'global_title', 'local_title', 'location', 'shepherd', 'zone',
                   'created_date', 'created_by')
 
 
