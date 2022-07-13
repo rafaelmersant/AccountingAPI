@@ -99,22 +99,31 @@ class ChurchReportViewSet(ModelViewSet):
     def get_queryset(self):
        period_month = self.request.query_params.get('period_month', None)
        period_year = self.request.query_params.get('period_year', None)
+       church_id = self.request.query_params.get('church_id', None)
 
        if period_month is not None and period_year is not None:
            query = """
                     select 
                         c.id, c.global_title, h.period_month, h.period_year, 
-                        (select d.amount from entries_item d 
+                        IFNULL((select d.amount from entries_item d 
                         where d.entry_id = h.id and d.concept_id = 1 and d.period_month = #periodMonth# 
-                        and d.period_year = #periodYear#) percent_concilio,
-                        (select d.amount from entries_item d 
+                        and d.period_year = #periodYear#),0) percent_concilio,
+                        IFNULL((select d.amount from entries_item d 
                         where d.entry_id = h.id and d.concept_id = 2 and d.period_month = #periodMonth# 
-                        and d.period_year = #periodYear#) ofrenda_misionera
+                        and d.period_year = #periodYear#),0) ofrenda_misionera
                     from administration_church c
-                    left outer join entries_entry h on h.church_id = c.id and 
-                    h.id in (select d2.entry_id from entries_item d2 where d2.concept_id in (1,2)
-                             and d2.period_month = #periodMonth# and d2.period_year = #periodYear#)
+                    left outer join entries_entry h on h.church_id = c.id 
+                             and h.id in (select d2.entry_id from entries_item d2 where d2.concept_id in (1,2)
+                                          and d2.period_month = #periodMonth# and d2.period_year = #periodYear#)
+                    #filterChurch#
                     order by 2
-                    """.replace("#periodMonth#", period_month).replace("#periodYear#", period_year)
+                    """.replace("#periodMonth#", period_month) \
+                       .replace("#periodYear#", period_year) \
+                       
+           if church_id is not None:
+              query = query.replace("#filterChurch#", f' where c.id = {church_id} ')
+           else:
+              query = query.replace("#filterChurch#", '')
 
+           print('query:::', query)
            return Item.objects.raw(query)
