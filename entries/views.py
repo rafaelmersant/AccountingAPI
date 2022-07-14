@@ -48,7 +48,7 @@ class EntryViewSet(ModelViewSet):
         period_year = self.request.query_params.get('period_year', None)
 
         if dashboard is not None and period_month != '0':
-            self.queryset = self.queryset.filter(period_month=period_month, period_year=period_year)
+            self.queryset = self.queryset.filter(item__period_month=period_month, item__period_year=period_year)
         
         if start_date is not None and end_date is not None:
             _start_date = date_format.strptime(start_date, '%Y-%m-%d')
