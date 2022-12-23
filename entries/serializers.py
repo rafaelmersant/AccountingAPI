@@ -27,7 +27,7 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entry
         fields = ('id', 'person', 'note', 'period_year', 'period_month', 'church',
-                  'created_date', 'created_by', 'total_amount', 'item_set')
+                  'created_date', 'entry_date', 'created_by', 'total_amount', 'item_set')
         
     
 class EntryAddUpdateSerializer(serializers.ModelSerializer):
@@ -37,7 +37,7 @@ class EntryAddUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Entry
         fields = ('id', 'church_id', 'person_id', 'note', 'period_year', 'period_month',
-                  'total_amount', 'created_date', 'created_by')
+                  'total_amount', 'created_date', 'entry_date', 'created_by')
         # optional_fields = ('church_id', 'person_id')
 
 
