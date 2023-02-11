@@ -45,4 +45,9 @@ class StandardResultsSetPaginationLevelHighest(PageNumberPagination):
     max_page_size = 200
 
 
+class StandardResultsSetPaginationLevelThousands(PageNumberPagination):
+    page_size = 2000
+    page_size_query_param = 'page_size'
+    max_page_size = 2000
+
 
