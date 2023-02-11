@@ -46,8 +46,9 @@ class Person(models.Model):
         if self.min_licenciado: return f'{self.min_licenciado}'
         if self.obrero_licenciado: return f'{self.obrero_licenciado}'
         if self.obrero_exhortador: return f'{self.obrero_exhortador}'
+        if self.obrero_inicial: return f'{self.obrero_inicial}'
         
-        return f'{self.obrero_inicial}'
+        return ''
 
 
 class Church(models.Model):
