@@ -40,6 +40,15 @@ class Person(models.Model):
         
         return 'Obrero Inicial'
 
+    @property
+    def credential_start(self):
+        if self.min_ordenado: return f'{self.min_ordenado}'
+        if self.min_licenciado: return f'{self.min_licenciado}'
+        if self.obrero_licenciado: return f'{self.obrero_licenciado}'
+        if self.obrero_exhortador: return f'{self.obrero_exhortador}'
+        
+        return f'{self.obrero_inicial}'
+
 
 class Church(models.Model):
     global_title = models.CharField(max_length=255)
