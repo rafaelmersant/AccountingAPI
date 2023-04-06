@@ -57,13 +57,14 @@ class PersonAddUpdateSerializer(serializers.ModelSerializer):
     obrero_licenciado = serializers.IntegerField(required=False)
     min_licenciado = serializers.IntegerField(required=False)
     min_ordenado = serializers.IntegerField(required=False)
+    attendance = serializers.DateTimeField(required=False)
     identification = serializers.CharField(max_length=20, required=False)
 
     class Meta:
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'created_date', 'created_by')
+                  'min_ordenado', 'created_date', 'created_by', 'attendance')
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -74,7 +75,8 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'credential', 'credential_start', 'created_date', 'created_by')
+                  'min_ordenado', 'credential', 'credential_start', 'created_date', 'created_by',
+                  'attendance')
 
 
 class ConceptSerializer(serializers.ModelSerializer):
