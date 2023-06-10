@@ -4,6 +4,8 @@ from rest_framework import serializers
 # Models
 from .models import Person, Concept, Church, User
 
+import hashlib
+
 
 class UserSerializer(serializers.ModelSerializer):
         
@@ -12,6 +14,15 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'username', 'password', 'name', 'user_hash',
                   'user_role', 'created_date', 'created_by')
 
+    def save(self, **kwargs):
+        password = self.validated_data['password']
+        if (len(password) < 32):
+            password = hashlib.md5(password.encode())
+            password = password.hexdigest()
+            self.validated_data["password"] = password
+            
+        return super().save(**kwargs)
+    
 
 class ShepherdSerializer(serializers.ModelSerializer):
     # church_id = serializers.IntegerField()
