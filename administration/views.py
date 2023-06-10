@@ -15,6 +15,7 @@ from accounting import paginations
 
 # Others
 import json
+import hashlib
 
 # Models
 from .models import User, Concept, Church, Person
@@ -53,7 +54,7 @@ class UserLogin(generics.ListCreateAPIView):
             body_unicode = request.body.decode('utf-8')
             body = json.loads(body_unicode)
             username = body['username']
-            password = body['password']
+            password = hashlib.md5(body['password'].encode()).hexdigest()
 
             user = User.objects.filter(username=username, password=password)
 
@@ -73,7 +74,7 @@ class UserLogin(generics.ListCreateAPIView):
             return Response("Bad Request",
                             status=status.HTTP_400_BAD_REQUEST)
 
-
+        
 class PersonViewSet(ModelViewSet):
     queryset = Person.objects.select_related('church').prefetch_related("church__shepherd").all()
     serializer_class = serializers.PersonSerializer
