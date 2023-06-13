@@ -39,6 +39,10 @@ class Person(models.Model):
         if self.obrero_exhortador: return 'Obrero Exhortador'
         
         return 'Obrero Inicial'
+    
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class Church(models.Model):

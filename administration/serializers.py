@@ -85,7 +85,7 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'credential', 'created_date', 'created_by')
+                  'min_ordenado', 'credential', 'created_date', 'created_by', 'full_name')
 
 
 class ConceptSerializer(serializers.ModelSerializer):
