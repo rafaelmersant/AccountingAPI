@@ -50,6 +50,10 @@ class Person(models.Model):
         if self.obrero_inicial: return f'{self.obrero_inicial}'
         
         return ''
+    
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 class Church(models.Model):
@@ -63,6 +67,13 @@ class Church(models.Model):
     
     def __str__(self):
         return f'{self.id}'
+    
+    @property
+    def shepherd_full_name(self):
+        if self.shepherd:
+            return f'{self.shepherd.first_name} {self.shepherd.last_name}'
+        
+        return ''
 
 
 class Concept(models.Model):

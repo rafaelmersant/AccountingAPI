@@ -58,7 +58,7 @@ class ChurchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Church
         fields = ('id', 'global_title', 'local_title', 'location', 'shepherd', 'zone',
-                  'created_date', 'created_by')
+                  'created_date', 'created_by', 'shepherd_full_name')
 
 
 class PersonAddUpdateSerializer(serializers.ModelSerializer):
@@ -87,7 +87,7 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
                   'min_ordenado', 'credential', 'credential_start', 'created_date', 'created_by',
-                  'attendance')
+                  'attendance', 'full_name')
 
 
 class ConceptSerializer(serializers.ModelSerializer):
