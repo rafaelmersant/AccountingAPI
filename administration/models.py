@@ -19,6 +19,7 @@ class Person(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     identification = models.CharField(max_length=20, null=True, blank=True)
+    reference = models.CharField(max_length=255, null=True, blank=True)
     church = models.ForeignKey("Church", on_delete=models.SET_NULL, null=True)
     obrero_inicial = models.PositiveSmallIntegerField(blank=True, null=True)
     obrero_exhortador = models.PositiveSmallIntegerField(blank=True, null=True)
