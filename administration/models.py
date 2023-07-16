@@ -18,39 +18,24 @@ class User(models.Model):
 class Person(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    age = models.PositiveSmallIntegerField(null=True, blank=True)
+    gender = models.CharField(max_length=1, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    ocupation = models.CharField(max_length=150, null=True, blank=True)
+    phone = models.CharField(max_length=30, null=True, blank=True)
+    cellphone = models.CharField(max_length=30, null=True, blank=True)
     identification = models.CharField(max_length=20, null=True, blank=True)
+    civil_status = models.CharField(max_length=1, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    reason_consultation = models.CharField(max_length=200, null=True, blank=True)
+    disease = models.CharField(max_length=200, null=True, blank=True)
+    doctor = models.CharField(max_length=100, null=True, blank=True)
     reference = models.CharField(max_length=255, null=True, blank=True)
-    church = models.ForeignKey("Church", on_delete=models.SET_NULL, null=True)
-    obrero_inicial = models.PositiveSmallIntegerField(blank=True, null=True)
-    obrero_exhortador = models.PositiveSmallIntegerField(blank=True, null=True)
-    obrero_licenciado = models.PositiveSmallIntegerField(blank=True, null=True)
-    min_licenciado = models.PositiveSmallIntegerField(blank=True, null=True)
-    min_ordenado = models.PositiveSmallIntegerField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    attendance = models.DateTimeField(blank=True, null=True)
-
+    
     def __str__(self):
         return f'{self.id}'
-    
-    @property
-    def credential(self):
-        if self.min_ordenado: return 'Ministro Ordenado'
-        if self.min_licenciado: return 'Ministro Licenciado'
-        if self.obrero_licenciado: return 'Obrero Licenciado'
-        if self.obrero_exhortador: return 'Obrero Exhortador'
-        
-        return 'Obrero Inicial'
-
-    @property
-    def credential_start(self):
-        if self.min_ordenado: return f'{self.min_ordenado}'
-        if self.min_licenciado: return f'{self.min_licenciado}'
-        if self.obrero_licenciado: return f'{self.obrero_licenciado}'
-        if self.obrero_exhortador: return f'{self.obrero_exhortador}'
-        if self.obrero_inicial: return f'{self.obrero_inicial}'
-        
-        return ''
     
     @property
     def full_name(self):

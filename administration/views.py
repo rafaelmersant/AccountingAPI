@@ -76,11 +76,11 @@ class UserLogin(generics.ListCreateAPIView):
 
         
 class PersonViewSet(ModelViewSet):
-    queryset = Person.objects.select_related('church').prefetch_related("church__shepherd").all()
+    queryset = Person.objects.all()
     serializer_class = serializers.PersonSerializer
     pagination_class = paginations.StandardResultsSetPaginationLevelThousands
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['id', 'first_name', 'last_name', 'church_id', 'identification']
+    filterset_fields = ['id', 'first_name', 'last_name', 'identification']
     search_fields = ['first_name', 'last_name', 'identification']
 
     def get_serializer_class(self):

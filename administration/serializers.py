@@ -62,32 +62,26 @@ class ChurchSerializer(serializers.ModelSerializer):
 
 
 class PersonAddUpdateSerializer(serializers.ModelSerializer):
-    church_id = serializers.IntegerField(required=False)
-    obrero_inicial = serializers.IntegerField(required=False)
-    obrero_exhortador = serializers.IntegerField(required=False)
-    obrero_licenciado = serializers.IntegerField(required=False)
-    min_licenciado = serializers.IntegerField(required=False)
-    min_ordenado = serializers.IntegerField(required=False)
-    attendance = serializers.DateTimeField(required=False)
     identification = serializers.CharField(max_length=20, required=False)
-
+    age = serializers.IntegerField(required=False)
+    date_of_birth = serializers.DateField(required=False)
+    
     class Meta:
         model = Person
-        fields = ('id', 'first_name', 'last_name', 'identification', 'church_id',
-                  'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'created_date', 'created_by', 'attendance', 'reference')
+        fields = ('id', 'first_name', 'last_name', 'identification',
+                  'age', 'gender', 'date_of_birth', 'ocupation', 'phone', 'cellphone',
+                  'civil_status', 'address', 'reason_consultation', 'disease', 'doctor',
+                  'created_date', 'created_by', 'reference')
 
 
 class PersonSerializer(serializers.ModelSerializer):
-    church = ChurchSerializer(many=False, read_only=True)
-    church_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Person
-        fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
-                  'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'credential', 'credential_start', 'created_date', 'created_by',
-                  'attendance', 'full_name', 'reference')
+        fields = ('id', 'first_name', 'last_name', 'identification',
+                  'age', 'gender', 'date_of_birth', 'ocupation', 'phone', 'cellphone',
+                  'civil_status', 'address', 'reason_consultation', 'disease', 'doctor',
+                  'created_date', 'created_by', 'full_name', 'reference')
 
 
 class ConceptSerializer(serializers.ModelSerializer):

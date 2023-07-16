@@ -26,8 +26,6 @@ class EntryViewSet(ModelViewSet):
                             .prefetch_related("church") \
                             .prefetch_related("person") \
                             .prefetch_related("church__shepherd") \
-                            .prefetch_related("person__church") \
-                            .prefetch_related("person__church__shepherd") \
                             .prefetch_related('created_by').all()
 
     serializer_class = serializers.EntrySerializer
@@ -72,8 +70,6 @@ class EntryItemViewSet(ModelViewSet):
             .prefetch_related('entry__church') \
             .prefetch_related('entry__person') \
             .prefetch_related('entry__created_by') \
-            .prefetch_related('entry__person__church') \
-            .prefetch_related('entry__person__church__shepherd') \
             .prefetch_related('entry__item_set') \
             .prefetch_related('entry__item_set__concept') \
             .filter(entry_id=self.kwargs["entry_pk"])
