@@ -18,7 +18,7 @@ import json
 import hashlib
 
 # Models
-from .models import User, Concept, Church, Person
+from .models import User, Concept, Church, Person, Attendance
 
 
 class ConceptViewSet(ModelViewSet):
@@ -101,3 +101,17 @@ class ChurchViewSet(ModelViewSet):
         if self.request.method == 'POST' or self.request.method == 'PUT':
             return serializers.ChurchAddUpdateSerializer
         return serializers.ChurchSerializer
+
+
+class AttendanceViewSet(ModelViewSet):
+    queryset = Attendance.objects.select_related("person").select_related("created_by").all()
+    serializer_class = serializers.AttendanceSerializer
+    pagination_class = paginations.StandardResultsSetPaginationLevelHighest
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['id', 'person', 'person_id', 'attendance_date', 'created_date']
+    search_fields = ['person',]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST' or self.request.method == 'PUT':
+            return serializers.AttendanceAddUpdateSerializer
+        return serializers.AttendanceSerializer

@@ -12,6 +12,7 @@ router.register('concepts', views.ConceptViewSet)
 router.register('users', views.UserViewSet)
 router.register('people', views.PersonViewSet)
 router.register('churches', views.ChurchViewSet)
+router.register('attendances', views.AttendanceViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 # Models
-from .models import Person, Concept, Church, User
+from .models import Person, Concept, Church, User, Attendance
 
 import hashlib
 
@@ -68,14 +68,13 @@ class PersonAddUpdateSerializer(serializers.ModelSerializer):
     obrero_licenciado = serializers.IntegerField(required=False)
     min_licenciado = serializers.IntegerField(required=False)
     min_ordenado = serializers.IntegerField(required=False)
-    attendance = serializers.DateTimeField(required=False)
     identification = serializers.CharField(max_length=20, required=False)
 
     class Meta:
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'created_date', 'created_by', 'attendance')
+                  'min_ordenado', 'created_date', 'created_by')
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -87,7 +86,7 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
                   'min_ordenado', 'credential', 'credential_start', 'created_date', 'created_by',
-                  'attendance', 'full_name')
+                  'full_name')
 
 
 class ConceptSerializer(serializers.ModelSerializer):
@@ -96,4 +95,20 @@ class ConceptSerializer(serializers.ModelSerializer):
         model = Concept
         fields = ('id', 'description', 'type', 'created_date', 'created_by')
 
+
+class AttendanceAddUpdateSerializer(serializers.ModelSerializer):
+    person_id = serializers.IntegerField(required=False)
+        
+    class Meta:
+        model = Attendance
+        fields = ('id', 'person_id', 'created_by', 'created_date', 'attendance_date')
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    person = PersonSerializer(many=False, read_only=True)
+    created_by = UserSerializer(many=False, read_only=True)
+         
+    class Meta:
+        model = Attendance
+        fields = ('id', 'person', 'created_by', 'created_date', 'attendance_date')
 

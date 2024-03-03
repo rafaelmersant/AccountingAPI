@@ -1,5 +1,6 @@
 from django.db import models
 
+import datetime
 
 class User(models.Model):
     email = models.EmailField()
@@ -27,8 +28,7 @@ class Person(models.Model):
     min_ordenado = models.PositiveSmallIntegerField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    attendance = models.DateTimeField(blank=True, null=True)
-
+    
     def __str__(self):
         return f'{self.id}'
     
@@ -85,3 +85,11 @@ class Concept(models.Model):
     
     def __str__(self):
         return f'{self.id}'
+    
+
+class Attendance(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.SET_NULL, blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    attendance_date = models.DateField(datetime.date.today() + datetime.timedelta(days = 7))
+    
