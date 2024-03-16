@@ -116,6 +116,8 @@ class ChurchReportViewSet(ModelViewSet):
                     from administration_church c
                     left outer join entries_entry h on h.church_id = c.id 
                              and strftime('%m%Y', h.created_date) = '#periodMonth##periodYear#'
+                             and h.id in (select d2.entry_id from entries_item d2 
+                                          where d2.concept_id = 1 or d2.concept_id = 2)
                     #filterChurch#
                     order by 2
                     """.replace("#periodMonth#", period_month) \
