@@ -108,17 +108,14 @@ class ChurchReportViewSet(ModelViewSet):
            query = """
                     select 
                         c.id, c.global_title, strftime('%m', h.created_date) as period_month, 
-                        strftime('%Y', h.period_year) as period_year, 
+                        strftime('%Y', h.created_date) as period_year, 
                         IFNULL((select d.amount from entries_item d 
-                        where d.entry_id = h.id and d.concept_id = 1 
-                        and strftime('%m%Y', d.created_date) = '#periodMonth##periodYear#'), 0) percent_concilio,
+                        where d.entry_id = h.id and d.concept_id = 1), 0) percent_concilio,
                         IFNULL((select d.amount from entries_item d 
-                        where d.entry_id = h.id and d.concept_id = 2 and 
-                        strftime('%m%Y', d.created_date) = '#periodMonth##periodYear#'), 0) ofrenda_misionera
+                        where d.entry_id = h.id and d.concept_id = 2), 0) ofrenda_misionera
                     from administration_church c
                     left outer join entries_entry h on h.church_id = c.id 
-                             and h.id in (select d2.entry_id from entries_item d2 where d2.concept_id in (1,2)
-                                          and strftime('%m%Y', d2.created_date) = '#periodMonth##periodYear#')
+                             and strftime('%m%Y', h.created_date) = '#periodMonth##periodYear#'
                     #filterChurch#
                     order by 2
                     """.replace("#periodMonth#", period_month) \
