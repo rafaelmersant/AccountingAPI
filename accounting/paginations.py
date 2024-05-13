@@ -12,7 +12,7 @@ class EntryListPagination(PageNumberPagination):
             start_date is not None or dashboard is not None:
             return 9000000
         else:
-            return 20
+            return 100
 
 
 class StandardResultsSetPagination(PageNumberPagination):
