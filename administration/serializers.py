@@ -74,7 +74,7 @@ class PersonAddUpdateSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('id', 'first_name', 'last_name', 'identification', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
-                  'min_ordenado', 'created_date', 'created_by')
+                  'min_ordenado', 'created_date', 'created_by', 'reviewed')
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'identification', 'church', 'church_id',
                   'obrero_inicial', 'obrero_exhortador', 'obrero_licenciado', 'min_licenciado',
                   'min_ordenado', 'credential', 'credential_start', 'created_date', 'created_by',
-                  'full_name')
+                  'full_name', 'reviewed')
 
 
 class ConceptSerializer(serializers.ModelSerializer):
