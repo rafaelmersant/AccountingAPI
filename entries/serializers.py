@@ -5,8 +5,8 @@ from administration.serializers import ChurchReducedSerializer,  \
     ConceptSerializer, PersonSerializer, UserSerializer
 
 # Models
-from .models import Entry, Item
-from administration.models import Concept
+from .models import Entry, Item, EntryHistory
+from administration.models import Concept, Church, Person
 
 
 class EntryItemReducedSerializer(serializers.ModelSerializer):
@@ -19,6 +19,7 @@ class EntryItemReducedSerializer(serializers.ModelSerializer):
 
 
 class EntrySerializer(serializers.ModelSerializer):
+    has_history = serializers.BooleanField(read_only=True, default=False)
     church = ChurchReducedSerializer(many=False, read_only=True)
     person = PersonSerializer(many=False, read_only=True)
     created_by = UserSerializer(many=False, read_only=True)
@@ -27,12 +28,12 @@ class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entry
         fields = ('id', 'person', 'note', 'period_year', 'period_month', 'church',
-                  'created_date', 'created_by', 'total_amount', 'item_set')
-        
-    
+                  'created_date', 'created_by', 'total_amount', 'item_set', 'has_history')
+
+
 class EntryAddUpdateSerializer(serializers.ModelSerializer):
-    church_id = serializers.IntegerField(required=False)
-    person_id = serializers.IntegerField(required=False)
+    church_id = serializers.PrimaryKeyRelatedField(source='church', queryset=Church.objects.all(), required=False, allow_null=True)
+    person_id = serializers.PrimaryKeyRelatedField(source='person', queryset=Person.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Entry
@@ -65,9 +66,9 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         try:
-            concept_id = self.validated_data['concept_id']
+            concept_id = self.validated_data.get('concept_id')
             concept = Concept.objects.get(id=concept_id)
-            concept.ocurrences += 1 
+            concept.ocurrences += 1
             concept.save()
         except Concept.DoesNotExist:
             pass
@@ -79,7 +80,7 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
         #     entry = Entry.objects.get(id=entry_id)
         #     try:
         #         if self.context['item_id'] is not None:
-        #             item_id = self.context['item_id'] 
+        #             item_id = self.context['item_id']
         #             item = Item.objects.get(id=item_id)
         #             entry.total_amount -= item.amount
         #             entry.total_amount += amount
@@ -90,7 +91,7 @@ class EntryItemAddUpdateSerializer(serializers.ModelSerializer):
         #     entry.save()
         # except Entry.DoesNotExist:
         #     pass
-        
+
         return super().save(**kwargs)
 
 
@@ -101,4 +102,12 @@ class ChurchReportSerializer(serializers.Serializer):
     ofrenda_misionera = serializers.DecimalField(max_digits=18, decimal_places=6, default=0)
     period_month = serializers.IntegerField()
     period_year = serializers.IntegerField()
-    
+
+
+
+class EntryHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntryHistory
+        fields = ('id', 'entry_id', 'item_id', 'action', 'concept', 'actor_id',
+                  'actor_name', 'changed_at', 'changes')
+        read_only_fields = fields

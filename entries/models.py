@@ -29,3 +29,18 @@ class Item(models.Model):
     
     def __str__(self):
         return f'{self.id}'
+
+
+class EntryHistory(models.Model):
+    # Keep the audit trail even if the original entry or user is deleted.
+    entry_id = models.PositiveBigIntegerField(db_index=True)
+    item_id = models.PositiveBigIntegerField(null=True, blank=True)
+    action = models.CharField(max_length=20)
+    concept = models.CharField(max_length=255, blank=True)
+    actor_id = models.PositiveBigIntegerField(null=True, blank=True)
+    actor_name = models.CharField(max_length=255)
+    changed_at = models.DateTimeField(auto_now_add=True)
+    changes = models.JSONField(default=list)
+
+    class Meta:
+        ordering = ['-changed_at', '-id']

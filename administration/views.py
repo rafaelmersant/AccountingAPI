@@ -1,5 +1,6 @@
 # Django
 from django_filters.rest_framework import DjangoFilterBackend
+import django_filters 
 
 # Django REST framework
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -103,12 +104,43 @@ class ChurchViewSet(ModelViewSet):
         return serializers.ChurchSerializer
 
 
+class AttendanceFilter(django_filters.FilterSet):
+    id__gt = django_filters.NumberFilter(
+        field_name='id',
+        lookup_expr='gt'
+    )
+
+    id__gte = django_filters.NumberFilter(
+        field_name='id',
+        lookup_expr='gte'
+    )
+
+    created_date__gte = django_filters.DateFilter(
+        field_name='created_date',
+        lookup_expr='gte'
+    )
+
+    class Meta:
+        model = Attendance
+        fields = [
+            'id',
+            'person',
+            'person_id',
+            'attendance_date',
+            'created_date',
+            'id__gt',
+            'id__gte',
+            'created_date__gte',
+        ]
+
+
 class AttendanceViewSet(ModelViewSet):
     queryset = Attendance.objects.select_related("person").select_related("created_by").all()
     serializer_class = serializers.AttendanceSerializer
     pagination_class = paginations.StandardResultsSetPaginationLevelHighest
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['id', 'person', 'person_id', 'attendance_date', 'created_date']
+    filterset_class = AttendanceFilter
+    # filterset_fields = ['id', 'person', 'person_id', 'attendance_date', 'created_date']
     search_fields = ['person',]
 
     def get_serializer_class(self):

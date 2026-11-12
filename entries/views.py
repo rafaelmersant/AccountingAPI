@@ -4,6 +4,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 # Django REST framework
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.db.models import Exists, OuterRef
+from .audit import EntryAuditMixin
 
 from accounting import paginations
 
@@ -14,13 +18,13 @@ from . import serializers
 import json
 
 # Models
-from .models import Entry, Item
+from .models import Entry, Item, EntryHistory
 
 import datetime
 from datetime import datetime as date_format
 
 
-class EntryViewSet(ModelViewSet):
+class EntryViewSet(EntryAuditMixin, ModelViewSet):
     queryset = Entry.objects.prefetch_related("item_set__concept") \
                             .prefetch_related("item_set") \
                             .prefetch_related("church") \
@@ -28,7 +32,8 @@ class EntryViewSet(ModelViewSet):
                             .prefetch_related("church__shepherd") \
                             .prefetch_related("person__church") \
                             .prefetch_related("person__church__shepherd") \
-                            .prefetch_related('created_by').all()
+                            .prefetch_related('created_by').annotate(
+                                has_history=Exists(EntryHistory.objects.filter(entry_id=OuterRef('pk'))))
 
     serializer_class = serializers.EntrySerializer
     pagination_class = paginations.EntryListPagination
@@ -36,9 +41,15 @@ class EntryViewSet(ModelViewSet):
     filterset_fields = ['id', 'note', 'church', 'church_id', 'person', 'person_id', 'total_amount']
 
     def get_serializer_class(self):
-        if self.request.method == 'POST' or self.request.method == 'PUT':
+        if self.request.method in ('POST', 'PUT', 'PATCH'):
             return serializers.EntryAddUpdateSerializer
         return serializers.EntrySerializer
+
+    @action(detail=True, methods=['get'])
+    def history(self, request, pk=None):
+        entry = self.get_object()
+        history = EntryHistory.objects.filter(entry_id=entry.pk)
+        return Response(serializers.EntryHistorySerializer(history, many=True).data)
     
     def get_queryset(self):
         start_date = self.request.query_params.get('start_date', None)
@@ -63,7 +74,7 @@ class EntryViewSet(ModelViewSet):
         return self.queryset
 
 
-class EntryItemViewSet(ModelViewSet):
+class EntryItemViewSet(EntryAuditMixin, ModelViewSet):
     serializer_class = serializers.EntryItemSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'reference', 'concept', 'type']
@@ -82,7 +93,7 @@ class EntryItemViewSet(ModelViewSet):
             .filter(entry_id=self.kwargs["entry_pk"])
        
     def get_serializer_class(self):
-        if self.request.method == 'POST' or self.request.method == 'PUT':
+        if self.request.method in ('POST', 'PUT', 'PATCH'):
             return serializers.EntryItemAddUpdateSerializer
         return serializers.EntryItemSerializer
     
